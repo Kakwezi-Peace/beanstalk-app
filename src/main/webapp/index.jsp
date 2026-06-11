@@ -5,35 +5,35 @@
 <%@ page import="java.util.Map" %>
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Beanstalk App</title>
-</head>
+<head><title>My Beanstalk App</title></head>
 <body>
   <h1>Hello! I am deployed successfully!</h1>
   <p>Version: 3.0</p>
   <p>Powered by AWS Elastic Beanstalk + Java</p>
   <p>Developed by: Kakwezi Peace</p>
   <%
-    String message = "Could not connect to DynamoDB";
+    String dbMessage = "Could not connect to DynamoDB";
     try {
       String tableName = System.getenv("DYNAMODB_TABLE");
-      DynamoDbClient client = DynamoDbClient.builder()
+      DynamoDbClient dbClient = DynamoDbClient.builder()
         .region(Region.EU_NORTH_1)
         .build();
-      Map<String, AttributeValue> key = new HashMap<>();
-      key.put("id", AttributeValue.builder().s("1").build());
-      GetItemRequest request = GetItemRequest.builder()
+      Map<String, AttributeValue> itemKey = new HashMap<>();
+      itemKey.put("id", AttributeValue.builder().s("1").build());
+      GetItemRequest getRequest = GetItemRequest.builder()
         .tableName(tableName)
-        .key(key)
+        .key(itemKey)
         .build();
-      GetItemResponse response = client.getItem(request);
-      if (response.hasItem()) {
-        message = response.item().get("message").s();
+      GetItemResponse getResponse = dbClient.getItem(getRequest);
+      if (getResponse.hasItem()) {
+        dbMessage = getResponse.item().get("message").s();
+      } else {
+        dbMessage = "Item not found in table";
       }
-    } catch (Exception e) {
-      message = "Error: " + e.getMessage();
+    } catch (Throwable e) {
+      dbMessage = "Error: " + e.getMessage();
     }
   %>
-  <h2>Message from DynamoDB: <%= message %></h2>
+  <h2>Message from DynamoDB: <%= dbMessage %></h2>
 </body>
 </html>
