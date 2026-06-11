@@ -5,7 +5,8 @@
 </head>
 <body>
   <h1>Hello! I am deployed successfully!</h1>
-  <p>Version: 1.0</p>
+  <p>Version: 2.0</p>
   <p>Powered by AWS Elastic Beanstalk + Java</p>
+  <p>Developed by: Kakwezi Peace</p>
 </body>
 </html>
